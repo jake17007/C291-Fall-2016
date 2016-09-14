@@ -13,7 +13,7 @@ char * mystrcpy(char * theDest, char * theSource) {
 
   }
 
-  // add the escapte character to the end of the new string
+  // add the escape character to the end of the new string
   *(theDest + i) = '\0';  
 
   return(theDest);
