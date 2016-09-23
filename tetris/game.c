@@ -85,9 +85,15 @@ int game(void) {
 	switch (arrow) {
 	case UP:
 	  mvprintw(10,10,"UP            ");
+	  undisplay_tetromino(current);
+	  rotate_cw(current);
+	  display_tetromino(current);
 	  break;
 	case DOWN:
 	  mvprintw(10,10,"DOWN          ");
+	  undisplay_tetromino(current);
+	  rotate_ccw(current);
+	  display_tetromino(current);
 	  break;
 	case LEFT:
 	  mvprintw(10,10,"LEFT          ");
@@ -99,6 +105,11 @@ int game(void) {
 	  mvprintw(10,10,"REGCHAR 0x%02x",c);
 	  if (c=='q'){
 	    state = EXIT;
+	  } else if (c==' ') {
+	    mvprintw(10,10,"Pressed Space");
+	    undisplay_tetromino(current);
+	    current = NULL;
+	    state = ADD_PIECE;
 	  }
   	  break;
 	default:
