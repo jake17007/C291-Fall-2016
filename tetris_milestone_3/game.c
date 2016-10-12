@@ -80,15 +80,21 @@ highscore_t *game(highscore_t *highscores) {
       break;
     case ADD_PIECE:          // Add a new piece to the game
       if (next) {
+	score = compute_score(score, prune_well(w));
+       	display_score(score, w->upper_left_x-15,w->upper_left_y);
 	current = next;
-	next = create_tetromino ((w->upper_left_x+(w->width/2)), w->upper_left_y);
+	next = create_tetromino ((w->upper_left_x+(w->width/2)), w->upper_left_y);      
       }
       else {
 	current = create_tetromino ((w->upper_left_x+(w->width/2)), w->upper_left_y);
 	next = create_tetromino ((w->upper_left_x+(w->width/2)), w->upper_left_y);
       }
-      display_tetromino(current);
-      state = MOVE_PIECE;
+      if (check_collision(current) == COLLIDE) {
+	state = GAME_OVER;
+      } else {
+	display_tetromino(current);
+	state = MOVE_PIECE;
+      }
       break;
     case MOVE_PIECE:         // Move the current piece 
       if ((arrow = read_escape(&c)) != NOCHAR) {
@@ -139,6 +145,7 @@ highscore_t *game(highscore_t *highscores) {
       getmaxyx(stdscr,y,x);
       mvprintw(1,x/2-5,"  GAME_OVER  ");
       mvprintw(2,x/2-5,"#############");
+      mvprintw(4,x/2-5,"SCORE: %d",score);
       mvprintw(16,x/2-5,"Hit q to exit");
       getch(); // Wait for a key to be pressed. 
       state = EXIT;
